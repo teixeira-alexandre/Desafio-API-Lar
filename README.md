@@ -83,7 +83,7 @@ A API sobe em:
 
 ### **Swagger**
 
-👉 http://localhost:5000/swagger
+    http://localhost:5000/swagger
 
 ------------------------------------------------------------------------
 
