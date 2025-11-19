@@ -10,9 +10,14 @@ import "./index.css";
 
 function App() {
   const [pessoas, setPessoas] = useState([]);
+  // pessoa
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [dataNascimento, setDataNascimento] = useState("");
+  const [cpf, setCpf] = useState("");
+  const [estaAtivo, setEstaAtivo] = useState(true);
+
+  // telefone
   const [telefonesSelecionados, setTelefonesSelecionados] = useState({});
   const [novoTelefoneNumero, setNovoTelefoneNumero] = useState("");
   const [novoTelefoneTipo, setNovoTelefoneTipo] = useState("");
@@ -43,15 +48,24 @@ function App() {
       return;
     }
 
+    if (!cpf) {
+      alert("CPF é obrigatório");
+      return;
+    }
+
     const payload = {
       nome,
+      cpf,
       email: email || null,
       dataNascimento: dataNascimento || null,
+      estaAtivo,
     };
 
     try {
       await criarPessoa(payload);
       setNome("");
+      setCpf("");
+      setEstaAtivo(true);
       setEmail("");
       setDataNascimento("");
       await carregarPessoas();
@@ -129,10 +143,17 @@ function App() {
     >
       <h1>Desafio LAR CRUD</h1>
 
+      {/*formulário*/}
+
       <section style={{ marginBottom: 24 }}>
         <h2>Cadastrar Pessoa</h2>
         <form onSubmit={handleCriarPessoa}>
-          <div style={{ marginBottom: 8 }}>
+          <div style={{
+    marginBottom: 8,
+    display: "grid",
+    gridTemplateColumns: "150px 1fr",
+    alignItems: "center"
+ }}>
             <label>
               Nome:{" "}
               <input
@@ -142,7 +163,27 @@ function App() {
               />
             </label>
           </div>
-          <div style={{ marginBottom: 8 }}>
+          <div style={{
+    marginBottom: 8,
+    display: "grid",
+    gridTemplateColumns: "150px 1fr",
+    alignItems: "center"
+}}>
+            <label>
+              CPF: {"    "}
+              <input
+                value={cpf}
+                onChange={(e) => setCpf(e.target.value)}
+                placeholder="CPF"
+              />
+            </label>
+          </div>
+          <div style={{
+    marginBottom: 8,
+    display: "grid",
+    gridTemplateColumns: "150px 1fr",
+    alignItems: "center"
+}}>
             <label>
               E-mail:{" "}
               <input
@@ -152,7 +193,12 @@ function App() {
               />
             </label>
           </div>
-          <div style={{ marginBottom: 8 }}>
+          <div style={{
+    marginBottom: 8,
+    display: "grid",
+    gridTemplateColumns: "150px 1fr",
+    alignItems: "center"
+}}>
             <label>
               Data de nascimento:{" "}
               <input
@@ -162,10 +208,26 @@ function App() {
               />
             </label>
           </div>
+          <div style={{
+    marginBottom: 8,
+    display: "grid",
+    gridTemplateColumns: "150px 1fr",
+    alignItems: "center"
+}}>
+            <label>
+              Está ativo?{" "}
+              <input
+                type="checkbox"
+                checked={estaAtivo}
+                onChange={(e) => setEstaAtivo(e.target.checked)}
+              />
+            </label>
+          </div>
           <button type="submit">Salvar pessoa</button>
         </form>
       </section>
 
+      {/* listar pessoas */}
       <section>
         <h2>Lista de pessoas</h2>
         {carregando && <p>Carregando...</p>}
@@ -187,6 +249,7 @@ function App() {
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <div>
                   <strong>{pessoa.nome}</strong>
+                  <div>CPF : {pessoa.cpf || "sem CPF"}</div>
                   <div>
                     {pessoa.email || "sem e-mail"}{" "}
                     {pessoa.dataNascimento &&
@@ -194,6 +257,12 @@ function App() {
                         pessoa.dataNascimento
                       ).toLocaleDateString("pt-BR")}`}
                   </div>
+                  <div>Status:{" "}
+                    {pessoa.estaAtivo ? (
+                      <span style={{ color: "green" }}>Ativo</span>
+                    ) : (
+                      <span style={{ color: "red" }}>Inativo</span>
+                    )}</div>
                 </div>
                 <div>
                   <button onClick={() => handleVerTelefones(pessoa.id)}>
@@ -208,6 +277,8 @@ function App() {
                 </div>
               </div>
 
+              {/* listar telefones */}
+
               {telefonesSelecionados[pessoa.id] && (
                 <ul style={{ marginTop: 8 }}>
                   {telefonesSelecionados[pessoa.id].length === 0 && (
@@ -220,7 +291,7 @@ function App() {
                   ))}
                 </ul>
               )}
-
+              {/* formulário de novo telefone */}
               {pessoaParaTelefone === pessoa.id && (
                 <form onSubmit={handleCriarTelefone} style={{ marginTop: 8 }}>
                   <div style={{ marginBottom: 4 }}>

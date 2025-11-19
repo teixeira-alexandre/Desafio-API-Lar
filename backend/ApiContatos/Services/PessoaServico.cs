@@ -15,15 +15,13 @@ public class PessoaServico : IPessoaServico
 
     public async Task<List<Pessoa>> ObterTodasAsync()
     {
-        return await _contexto.Pessoas
-            .Include(p => p.Telefones)
-            .ToListAsync();
+        return await _contexto.Pessoas.Include(p => p.Telefones).ToListAsync();
     }
 
     public async Task<Pessoa?> ObterPorIdAsync(int id)
     {
-        return await _contexto.Pessoas
-            .Include(p => p.Telefones)
+        return await _contexto
+            .Pessoas.Include(p => p.Telefones)
             .FirstOrDefaultAsync(p => p.Id == id);
     }
 
@@ -36,8 +34,8 @@ public class PessoaServico : IPessoaServico
 
     public async Task<bool> AtualizarAsync(int id, Pessoa pessoa)
     {
-        var existente = await _contexto.Pessoas
-            .Include(p => p.Telefones)
+        var existente = await _contexto
+            .Pessoas.Include(p => p.Telefones)
             .FirstOrDefaultAsync(p => p.Id == id);
 
         if (existente == null)

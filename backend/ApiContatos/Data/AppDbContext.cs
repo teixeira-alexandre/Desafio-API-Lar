@@ -6,9 +6,7 @@ namespace ApiContatos.Data;
 public class AppDbContext : DbContext
 {
     public AppDbContext(DbContextOptions<AppDbContext> options)
-        : base(options)
-    {
-    }
+        : base(options) { }
 
     public DbSet<Pessoa> Pessoas { get; set; } = null!;
     public DbSet<Telefone> Telefones { get; set; } = null!;
@@ -22,12 +20,18 @@ public class AppDbContext : DbContext
             entidade.ToTable("Pessoas");
             entidade.HasKey(p => p.Id);
 
-            entidade.Property(p => p.Nome)
-                .IsRequired()
-                .HasMaxLength(100);
+            entidade.Property(p => p.Nome).IsRequired().HasMaxLength(100);
 
-            entidade.Property(p => p.Email)
-                .HasMaxLength(150);
+            entidade.Property(p => p.Email).HasMaxLength(150);
+
+            entidade.Property(p => p.Cpf).HasMaxLength(11);
+
+            // CPF Único
+            entidade.HasIndex(p => p.Cpf).IsUnique();
+
+            entidade.Property(p => p.DataNascimento);
+
+            entidade.Property(p => p.EstaAtivo).HasDefaultValue(true);
         });
 
         modelBuilder.Entity<Telefone>(entidade =>
@@ -35,14 +39,12 @@ public class AppDbContext : DbContext
             entidade.ToTable("Telefones");
             entidade.HasKey(t => t.Id);
 
-            entidade.Property(t => t.Numero)
-                .IsRequired()
-                .HasMaxLength(20);
+            entidade.Property(t => t.Numero).IsRequired().HasMaxLength(20);
 
-            entidade.Property(t => t.Tipo)
-                .HasMaxLength(30);
+            entidade.Property(t => t.Tipo).HasMaxLength(30);
 
-            entidade.HasOne(t => t.Pessoa)
+            entidade
+                .HasOne(t => t.Pessoa)
                 .WithMany(p => p.Telefones)
                 .HasForeignKey(t => t.PessoaId)
                 .OnDelete(DeleteBehavior.Cascade);

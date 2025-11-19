@@ -15,9 +15,7 @@ public class TelefoneServico : ITelefoneServico
 
     public async Task<List<Telefone>> ObterPorPessoaAsync(int pessoaId)
     {
-        return await _contexto.Telefones
-            .Where(t => t.PessoaId == pessoaId)
-            .ToListAsync();
+        return await _contexto.Telefones.Where(t => t.PessoaId == pessoaId).ToListAsync();
     }
 
     public async Task<Telefone> CriarAsync(Telefone telefone)

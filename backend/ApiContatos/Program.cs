@@ -7,7 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Configuração do DbContext com MySQL
 var conexao = builder.Configuration.GetConnectionString("ConexaoPadrao");
 builder.Services.AddDbContext<AppDbContext>(opcoes =>
-    opcoes.UseMySql(conexao, ServerVersion.AutoDetect(conexao)));
+    opcoes.UseMySql(conexao, ServerVersion.AutoDetect(conexao))
+);
 
 // Serviços de domínio
 builder.Services.AddScoped<IPessoaServico, PessoaServico>();
@@ -19,13 +20,13 @@ builder.Services.AddControllers();
 // CORS para o frontend em React
 builder.Services.AddCors(opcoes =>
 {
-    opcoes.AddPolicy("PermitirFrontendLocalhost", politica =>
-    {
-        politica
-            .WithOrigins("http://localhost:3000")
-            .AllowAnyHeader()
-            .AllowAnyMethod();
-    });
+    opcoes.AddPolicy(
+        "PermitirFrontendLocalhost",
+        politica =>
+        {
+            politica.WithOrigins("http://localhost:3000").AllowAnyHeader().AllowAnyMethod();
+        }
+    );
 });
 
 // Swagger
@@ -40,7 +41,6 @@ using (var escopo = app.Services.CreateScope())
     var contexto = escopo.ServiceProvider.GetRequiredService<AppDbContext>();
     contexto.Database.EnsureCreated();
 }
-
 
 // Swagger UI sempre habilitado para facilitar o teste
 app.UseSwagger();
