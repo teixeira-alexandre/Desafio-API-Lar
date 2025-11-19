@@ -16,6 +16,6 @@ public class Telefone
 
     public int PessoaId { get; set; }
 
-    [JsonIgnore] // não precisa vir no JSON
-    public Pessoa? Pessoa { get; set; } // <- agora é opcional
+    [JsonIgnore]
+    public Pessoa? Pessoa { get; set; }
 }
