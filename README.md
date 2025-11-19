@@ -7,8 +7,6 @@ seus respectivos telefones, utilizando:
     Swagger\
 -   **Banco de Dados:** **MySQL 8** rodando em Docker\
 -   **Frontend:** **React 18** consumindo a API via Axios\
--   **Integração:** API ↔ Banco ↔ Frontend funcionando de ponta a ponta
-
 ------------------------------------------------------------------------
 
 ## **Arquitetura do Projeto**
@@ -51,7 +49,7 @@ seus respectivos telefones, utilizando:
 
 ------------------------------------------------------------------------
 
-## 🐳 **1. Subindo o Banco de Dados (MySQL no Docker)**
+## **1. Subindo o Banco de Dados (MySQL no Docker)**
 
 ### **1.1 Criar o arquivo `.env`**
 
@@ -71,7 +69,7 @@ docker-compose up -d
 
 ------------------------------------------------------------------------
 
-## 🖥 **2. Rodando o Backend (.NET 8)**
+## **2. Rodando o Backend (.NET 8)**
 
 ``` bash
 cd backend/ApiContatos
